@@ -1,18 +1,19 @@
+import json
+
 from torch.utils.data import Dataset, DataLoader
+import pickle
+import os
 
 
-class TrainSet(Dataset):
-    def __init__(self, triples, nentity, nrelation, negative_sample_size):
-
-        self.triples = triples
-        self.nentity = nentity
-        self.nrelation = nrelation
-        self.negative_sample_size = negative_sample_size
+class FB17K_237(Dataset):
+    def __init__(self, args, type):
+        self.args = args
+        with open(os.path.join(args.save_path, type + '_p_n_triples.pkl'), 'rb') as f:
+            self.dataset = pickle.load(f)
 
     def __getitem__(self, idx):
-        positive_sample = self.triples[idx]
-
-        return positive_sample
+        sample = self.dataset[idx]
+        return sample
 
     def __len__(self):
-        return len(self.triples)
+        return len(self.dataset)
